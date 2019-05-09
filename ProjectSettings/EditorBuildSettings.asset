@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/AirSig/Demo Scene/DeveloperDefined.unity
     guid: 5e4801dba045e5041821160a26c001a8
   - enabled: 1
-    path: Assets/Scenes/fuk.unity
+    path: Assets/Scenes/temp/fuk.unity
     guid: e2f26c9ced099e6418c73d3d868a9348
   m_configObjects: {}
