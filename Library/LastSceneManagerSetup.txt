@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/AirSig/Demo Scene/DeveloperDefined.unity
+  isLoaded: 1
+  isActive: 1
