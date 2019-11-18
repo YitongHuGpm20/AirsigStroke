@@ -19,6 +19,15 @@ public class DeveloperDefined : BasedGestureHandle {
     public int pHealth = 100;
     public AudioClip spawnDuck;
     private AudioSource sourceDuck;
+    public AudioSource SFXPlayer;
+    public GameObject particleEffect;
+    public bool playingSFX = false;
+    private bool playHeartSFX = false;
+    private bool playCSFX = false;
+    private bool playTriangleSFX = false;
+    private bool playErrorSFX = false;
+
+    public List<AudioClip> SFX = new List<AudioClip>();
 
     // Callback for receiving signature/gesture progression or identification results
     AirSigManager.OnDeveloperDefinedMatch developerDefined;
@@ -40,6 +49,7 @@ public class DeveloperDefined : BasedGestureHandle {
     void Awake() {
         Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
         sourceDuck = GetComponent<AudioSource>();
+       // sourceDuck.enabled = false;
         // Update the display text
         textMode.text = string.Format("Mode: {0}", AirSigManager.Mode.DeveloperDefined.ToString());
         textResult.text = defaultResultText = "Pressing trigger on the right hand and write\ntriangle symbol in the air\nReleasing trigger when finish\nPress left hand trigger to shoot\nwrite heart symbol to get a shield";
@@ -83,16 +93,47 @@ public class DeveloperDefined : BasedGestureHandle {
     void Update() {
         UpdateUIandHandleControl();
         playerHealth.text = "Player Health:" + pHealth.ToString();
+        
+        if (playHeartSFX)
+        {
+            blackHole.SetActive(true);
+            SFXPlayer.clip = SFX[1];
+            SFXPlayer.Play();
+            playHeartSFX = false;
+        }
+        else if (playTriangleSFX)
+        {
+            particleEffect.SetActive(true);
+            SFXPlayer.clip = SFX[0];
+            SFXPlayer.Play();
+            hasAmmo = true;
+            blackHole.SetActive(false);
+            playTriangleSFX = false;
+            
+        }
+        else if (playErrorSFX)
+        {
+            SFXPlayer.clip = SFX[2];
+            SFXPlayer.Play();
+            // Reset the variable so that it doesn't play again
+            playErrorSFX = false;
+        }
+       
         if (accuracy >= 1.1 && !hasAmmo && exactGesture == "Triangle")
         {
+            particleEffect.SetActive(true);
             hasAmmo = true;
             blackHole.SetActive(false);
             sourceDuck.PlayOneShot(spawnDuck);
+            
         }
+       
+        /*
         if (accuracy >= 1.1 && exactGesture == "HEART")
             blackHole.SetActive(true);
-
-        if (ViveInput.GetPressDown(HandRole.LeftHand, ControllerButton.Trigger) && hasAmmo)
+        */
+       
+        if (ViveInput.GetPressDown(HandRole.RightHand, ControllerButton.Pad) && hasAmmo)
         {
             SpawnDuck();
             hasAmmo = false;
@@ -106,6 +147,7 @@ public class DeveloperDefined : BasedGestureHandle {
 
         if (pHealth == 0)
             SceneManager.LoadScene(1);
+       
         
     }
 
@@ -116,6 +158,38 @@ public class DeveloperDefined : BasedGestureHandle {
         tempDuck.transform.Translate(0f, 0f, 0.02f);
         
 
-        Debug.Log("Duckkkkkkkkkkk");
+       // Debug.Log("Duckkkkkkkkkkk");
+    }
+    /// <summary>
+    /// Sets the variables to let Update() know to play sound effects
+    /// Gets called by onDeveloperDefinedMatch
+    /// </summary>
+    /// <param name="gestureId"></param>
+    /// <param name="exactGesture">closest matching gesture</param>
+    /// <param name="accuracy">how well it matches</param>
+    void PlaySFX(long gestureId, string exactGesture, float accuracy)
+    {
+        if(exactGesture == "HEART" && accuracy >= 1.1)
+        {
+            playHeartSFX = true;
+           
+        }
+        else if(exactGesture == "Triangle" && accuracy >= 1.1 && !hasAmmo)
+        {
+            playTriangleSFX = true;
+        }
+        else
+        {
+            playErrorSFX = true;
+        }
+   
+    }
+    private void OnEnable()
+    {
+        airsigManager.onDeveloperDefinedMatch += PlaySFX;
+    }
+    private void OnDisable()
+    {
+        airsigManager.onDeveloperDefinedMatch -= PlaySFX;
     }
 }

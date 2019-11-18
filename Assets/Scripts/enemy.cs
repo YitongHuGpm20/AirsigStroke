@@ -23,7 +23,9 @@ public class enemy : MonoBehaviour
     {
         if(eHealth == 0)
         {
-            Destroy(this.gameObject);
+            this.gameObject.GetComponent<MeshRenderer>().enabled = false;
+            this.gameObject.GetComponent<Collider>().enabled = false;
+            Destroy(this.gameObject, 1.5f);
         }
 
         transform.LookAt(player);
