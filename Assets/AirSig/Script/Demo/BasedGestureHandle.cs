@@ -91,7 +91,7 @@ public class BasedGestureHandle : MonoBehaviour {
 
     protected void UpdateUIandHandleControl() {
         if (Input.GetKeyUp(KeyCode.Escape)) {
-            Application.Quit();
+            //Application.Quit();
         }
         if (null != textToUpdate) {
             if(uiFeedback != null) StopCoroutine(uiFeedback);

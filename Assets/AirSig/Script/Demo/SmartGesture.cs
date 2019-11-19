@@ -31,18 +31,18 @@ public class SmartGesture : BasedGestureHandle {
             if (smartTrainCount >= MAX_TRAIN_COUNT) {
                 smartTrainCount = 0;
                 textToUpdate = null; // let nextUiAction to handle UI update
-                if ("HEART" == currentSmartTrainDeveloperDefinedTarget) {
-                    currentSmartTrainDeveloperDefinedTarget = "C";
+                if ("LIGHTNING" == currentSmartTrainDeveloperDefinedTarget) {
+                    currentSmartTrainDeveloperDefinedTarget = "LIGHTNING";
                     
-                    airsigManager.SetDeveloperDefinedTarget(new List<string> { "C" });
+                    airsigManager.SetDeveloperDefinedTarget(new List<string> { "LIGHTNING" });
                     nextUiAction = () => {
                         ToggleGestureImage("C");
                         textResult.text = defaultResultText = "Please write below gesture 5 times\nPress trigger to start\nRelease trigger when finish";
                     };
-                } else if ("C" == currentSmartTrainDeveloperDefinedTarget) {
-                    currentSmartTrainDeveloperDefinedTarget = "DOWN";
+                } else if ("LIGHTNING" == currentSmartTrainDeveloperDefinedTarget) {
+                    currentSmartTrainDeveloperDefinedTarget = "LIGHTNING";
                     
-                    airsigManager.SetDeveloperDefinedTarget(new List<string> { "DOWN" });
+                    airsigManager.SetDeveloperDefinedTarget(new List<string> { "LIGHTNING" });
                     nextUiAction = () => {
                         ToggleGestureImage("Down");
                         textResult.text = defaultResultText = "Please write below gesture 5 times\nPress trigger to start\nRelease trigger when finish";
@@ -88,10 +88,10 @@ public class SmartGesture : BasedGestureHandle {
         smartTrainCount = 0;
         textMode.text = string.Format("Mode: {0}", AirSigManager.Mode.SmartTrainDeveloperDefined.ToString());
         airsigManager.SetMode(AirSigManager.Mode.SmartTrainDeveloperDefined);
-        airsigManager.SetClassifier("SampleGestureProfile", "");
-        airsigManager.SetDeveloperDefinedTarget(new List<string> { "HEART" });
+        airsigManager.SetClassifier("Spellcasters Mini Test", "");
+        airsigManager.SetDeveloperDefinedTarget(new List<string> { "LIGHTNING" });
 
-        currentSmartTrainDeveloperDefinedTarget = "HEART";
+        currentSmartTrainDeveloperDefinedTarget = "LIGHTNING";
     }
 
     // Use this for initialization

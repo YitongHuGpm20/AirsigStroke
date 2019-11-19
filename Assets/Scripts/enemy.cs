@@ -10,12 +10,17 @@ public class enemy : MonoBehaviour
     public AudioClip dieDuck;
     private AudioSource sourceDuck;
     public Transform player;
-    public Text enemyHealth;
+    public Image healthbar;
     // Start is called before the first frame update
     void Start()
     {
         sourceDuck = GetComponent<AudioSource>();
-        enemyHealth.text = "Health:" + eHealth.ToString();
+        if(GameObject.FindGameObjectWithTag("lefthand") != null)
+        {
+            player = GameObject.FindGameObjectWithTag("lefthand").GetComponent<Transform>();
+        }
+        
+        healthbar.fillAmount = eHealth / 30.0f;
     }
 
     // Update is called once per frame
@@ -29,7 +34,7 @@ public class enemy : MonoBehaviour
         }
 
         transform.LookAt(player);
-        enemyHealth.text = "Health:" + eHealth.ToString();
+        healthbar.fillAmount = eHealth / 30.0f;
 
     }
 

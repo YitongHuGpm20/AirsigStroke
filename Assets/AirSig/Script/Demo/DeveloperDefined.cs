@@ -49,9 +49,10 @@ public class DeveloperDefined : BasedGestureHandle {
     void Awake() {
         Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
         sourceDuck = GetComponent<AudioSource>();
-       // sourceDuck.enabled = false;
+        // sourceDuck.enabled = false;
         // Update the display text
-        textMode.text = string.Format("Mode: {0}", AirSigManager.Mode.DeveloperDefined.ToString());
+        AirSigManager.Mode Mode = AirSigManager.Mode.DeveloperDefined;
+        textMode.text = string.Format("Mode: {0}", Mode.ToString());
         textResult.text = defaultResultText = "Pressing trigger on the right hand and write\ntriangle symbol in the air\nReleasing trigger when finish\nPress left hand trigger to shoot\nwrite heart symbol to get a shield";
         textResult.alignment = TextAnchor.UpperCenter;
         instruction.SetActive(false);
@@ -60,10 +61,9 @@ public class DeveloperDefined : BasedGestureHandle {
         // Configure AirSig by specifying target 
         developerDefined = new AirSigManager.OnDeveloperDefinedMatch(HandleOnDeveloperDefinedMatch);
         airsigManager.onDeveloperDefinedMatch += developerDefined;
-        airsigManager.SetMode(AirSigManager.Mode.DeveloperDefined);
-        airsigManager.SetDeveloperDefinedTarget(new List<string> { "HEART", "C", "DOWN", "Triangle" });
+        airsigManager.SetMode(Mode);
+        airsigManager.SetDeveloperDefinedTarget(new List<string> { "HEART", "C", "DOWN", "Triangle"});
         airsigManager.SetClassifier("Spellcasters Mini Test", "");
-
         checkDbExist();
 
         airsigManager.SetTriggerStartKeys(
